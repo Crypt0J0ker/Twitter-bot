@@ -1,0 +1,35 @@
+{
+  "name": "twitter-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "follow1": "node scripts/checkFollow.js",
+    "follow2": "node scripts/checkFollowTwit.js",
+    "follow3": "node scripts/checkFollowTwitV2.js",
+    "follow4": "node scripts/get_tweets_with_bearer_token.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "localtunnel": "^2.0.2",
+    "needle": "^3.3.1",
+    "oauth-1.0a": "^2.2.6",
+    "passport": "^0.7.0",
+    "passport-twitter": "^1.0.4",
+    "twit": "^2.2.11",
+    "twitter-api-v2": "^1.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

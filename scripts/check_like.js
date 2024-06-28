@@ -1,23 +1,31 @@
-const axios = require('axios')
+const { TwitterApi } = require('twitter-api-v2')
 require('dotenv').config()
 
 const tweetId = '1471878991359455232'
-const userId = process.env.USER_ID
+const userId = process.env.TARGET_USER_ID
 
 const checkTweetLike = async (tweetId, userId) => {
-  const token = process.env.BEARER_TOKEN
+  const client = new TwitterApi({
+    appKey: process.env.API_KEY,
+    appSecret: process.env.API_KEY_SECRET,
+    accessToken: process.env.ACCESS_TOKEN,
+    accessSecret: process.env.ACCESS_TOKEN_SECRET,
+  })
 
+  // Verify the authentication
   try {
-    const response = await axios.get(
-      `https://api.twitter.com/2/tweets/${tweetId}/liking_users`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    const user = await client.v2.me()
+    console.log(`Authenticated as ${user.data.username}`)
+  } catch (authError) {
+    console.error('Authentication failed:', authError.message)
+    return
+  }
 
-    const likedUsers = response.data.data || []
+  // Check if user liked the tweet
+  try {
+    const response = await client.v2.get(`tweets/${tweetId}/liking_users`)
+
+    const likedUsers = response.data || []
     const userLiked = likedUsers.some(user => user.id === userId)
 
     if (userLiked) {
@@ -30,7 +38,12 @@ const checkTweetLike = async (tweetId, userId) => {
       )
     }
   } catch (error) {
-    console.error('Error fetching liking users:', error)
+    console.error('Error fetching liking users:', error.message)
+    if (error.response) {
+      console.error('Response data:', error.response.data)
+      console.error('Response status:', error.response.status)
+      console.error('Response headers:', error.response.headers)
+    }
   }
 }
 
